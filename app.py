@@ -3,8 +3,6 @@ import duckdb
 import streamlit as st
 import io
 
-from pandas.core.computation.common import result_type_many
-
 csv='''
 beverage,price
 orange juice,2.5
@@ -29,12 +27,25 @@ CROSS JOIN food_items
 
 solution=duckdb.sql(answer).df()
 
+
 st.header("enter your code:")
 query = st.text_area(label="Votre code SQL ici", key="user_input")
 
 if query:
     result = duckdb.sql(query).df()
     st.dataframe(result)
+
+
+with st.sidebar:
+    option = st.selectbox(
+        "What would you like to review ?",
+        ("Joins","Group By","Window Functions"),
+        index=None,
+        placeholder="Select a them to practice..."
+    )
+
+    st.write('You selected :', option)
+
 
 
 tab2,tab3=st.tabs(["Tables","Solution"])
