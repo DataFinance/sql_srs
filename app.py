@@ -1,49 +1,57 @@
-import streamlit as st
 import pandas as pd
 import duckdb
+import streamlit as st
+import io
+
+from pandas.core.computation.common import result_type_many
+
+csv='''
+beverage,price
+orange juice,2.5
+espresso,2
+tea,3
+'''
+beverages=pd.read_csv(io.StringIO(csv))
+
+csv2='''
+food_item,food_price
+cookie juice,2.5
+chocolatine,2
+muffin,3
+'''
+
+food_items=pd.read_csv(io.StringIO(csv2))
+
+answer="""
+SELECT * FROM beverages
+CROSS JOIN food_items
+"""
+
+solution=duckdb.sql(answer).df()
+
+st.header("enter your code:")
+query = st.text_area(label="Votre code SQL ici", key="user_input")
+
+if query:
+    result = duckdb.sql(query).df()
+    st.dataframe(result)
 
 
-st.write("""
-# SQL SRS
-Spaced Repetition System SQL practice
-""")
-
-
-option = st.selectbox(
-    "What would you like to review ?",
-    ("Joins","Group By","Window Functions"),
-    index=None,
-    placeholder="Select a them to practice..."
-)
-
-st.write('You selected :', option)
-
-data = {"a": [1, 2, 3], "b": [4, 5, 6]}
-df = pd.DataFrame(data)
-
-
-tab1, tab2, tab3, tab4 = st.tabs(["Cat", "Dog", "Owl", "text"])
-
-with tab1:
-    st.header("A cat")
-    st.image("https://static.streamlit.io/examples/cat.jpg", width=200)
+tab2,tab3=st.tabs(["Tables","Solution"])
 
 with tab2:
-    st.header("A dog")
-    st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
+    st.write("Tables: beverages")
+    st.dataframe(beverages)
+    st.write("Tables: food_items")
+    st.dataframe(food_items)
+    st.write("expected")
+    st.dataframe(solution)
 
 with tab3:
-    st.header("An owl")
-    st.image("https://static.streamlit.io/examples/owl.jpg", width=200)
-
-with tab4:
-    sql_query= st.text_area(label="Entrez votre query ici svp")
-    resultat=duckdb.query(sql_query)
-    st.write(f"Vous avez entré la requête sql suivante : {sql_query}")
+    st.write(answer)
 
 
-    st.dataframe(resultat.df())
-    st.write(resultat)
+
 
 
 
