@@ -1,4 +1,4 @@
-name: check_code_quality
+name: code_quality_checking
 on: pull_request
 job:
   mon_job_black:
