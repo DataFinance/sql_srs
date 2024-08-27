@@ -6,22 +6,22 @@ import duckdb
 import pandas as pd
 import streamlit as st
 
-CSV = """
+csv = """
 beverage,price
 orange juice,2.5
 espresso,2
 tea,3
 """
-beverages = pd.read_csv(io.StringIO(CSV))
+beverages = pd.read_csv(io.StringIO(csv))
 
-CSV2 = """
+csv2 = """
 food_item,food_price
 cookie juice,2.5
 chocolatine,2
 muffin,3
 """
 
-food_items = pd.read_csv(io.StringIO(CSV2))
+food_items = pd.read_csv(io.StringIO(csv2))
 
 ANSWER_STR = """
 SELECT * FROM beverages
