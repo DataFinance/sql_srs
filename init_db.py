@@ -20,11 +20,11 @@ con.execute("CREATE TABLE IF NOT EXISTS memory_state_df AS SELECT * FROM memory_
 
 
 CSV2 = """
-#food_item,food_price
-#cookie juice,2.5
-#chocolatine,2
-#muffin,3
-#"""
+food_item,food_price
+cookie juice,2.5
+chocolatine,2
+muffin,3
+"""
 
 food_items = pd.read_csv(io.StringIO(CSV2))
 con.execute("CREATE TABLE IF NOT EXISTS FOOD_ITEMS AS SELECT * FROM food_items")
