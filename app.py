@@ -1,80 +1,65 @@
 # pylint: disable=missing-module-docstring
-
-import io
-
 import duckdb
-import pandas as pd
 import streamlit as st
 
-CSV = """
-beverage,price
-orange juice,2.5
-espresso,2
-tea,3
-"""
-beverages = pd.read_csv(io.StringIO(CSV))
+con = duckdb.connect(database="data/exercices_sql_tables.duckdb",read_only=False)
 
-CSV2 = """
-food_item,food_price
-cookie juice,2.5
-chocolatine,2
-muffin,3
-"""
 
-food_items = pd.read_csv(io.StringIO(CSV2))
+#ANSWER_STR = """
+#SELECT * FROM beverages
+#CROSS JOIN food_items
+#"""
 
-ANSWER_STR = """
-SELECT * FROM beverages
-CROSS JOIN food_items
-"""
+#solution_df = duckdb.sql(ANSWER_STR).df()
 
-solution_df = duckdb.sql(ANSWER_STR).df()
+with st.sidebar:
+    theme = st.selectbox(
+        "What would you like to review ?",
+        ("cross-joins", "Group By", "Window Functions"),
+        index=None,
+        placeholder="Select a them to practice...",
+    )
+
+    st.write("You selected :", theme)
+
+    exercise = con.execute(f"SELECT * FROM memory_state_df WHERE theme = '{theme}'").df()
+    st.write(exercise)
 
 st.header("Enter your code please : ")
 query = st.text_area(label="Votre code SQL ici svp", key="user_input")
 
 
-if query:
+#if query:
 
-    result = duckdb.sql(query).df()
-    st.dataframe(result)
+#    result = duckdb.sql(query).df()
+#    st.dataframe(result)
 
-    try:
-        result = result[solution_df.columns]
+#    try:
+#        result = result[solution_df.columns]
         # result=result[["beverage","price","food_item","food_price"]]
-        st.dataframe(result.compare(solution_df))
+#        st.dataframe(result.compare(solution_df))
 
-    except KeyError as e:
-        st.write("Some columns are missing")
+#    except KeyError as e:
+#        st.write("Some columns are missing")
 
-    n_lines_difference = result.shape[0] - solution_df.shape[0]
+#    n_lines_difference = result.shape[0] - solution_df.shape[0]
 
-    if n_lines_difference != 0:
-        st.write(
-            f"result had a {n_lines_difference} lines difference with the solution"
-        )
-
-
-with st.sidebar:
-    option = st.selectbox(
-        "What would you like to review ?",
-        ("Joins", "Group By", "Window Functions"),
-        index=None,
-        placeholder="Select a them to practice...",
-    )
-
-    st.write("You selected :", option)
+#    if n_lines_difference != 0:
+#        st.write(
+#            f"result had a {n_lines_difference} lines difference with the solution"
+#        )
 
 
-tab2, tab3 = st.tabs(["Tables", "Solution"])
 
-with tab2:
-    st.write("Tables: beverages")
-    st.dataframe(beverages)
-    st.write("Tables: food_items")
-    st.dataframe(food_items)
-    st.write("expected")
-    st.dataframe(solution_df)
+#tab2, tab3 = st.tabs(["Tables", "Solution"])
 
-with tab3:
-    st.write(ANSWER_STR)
+#with tab2:
+#    st.write("Tables: beverages")
+#    st.dataframe(beverages)
+#    st.write("Tables: food_items")
+#    st.dataframe(food_items)
+#    st.write("expected")
+#    st.dataframe(solution_df)
+
+#with tab3:
+#    st.write(ANSWER_STR)
