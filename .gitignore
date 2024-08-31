@@ -1,4 +1,7 @@
 .idea/
 venv/
 *.csv
+my_checks.py
+test_db.py
+
 
