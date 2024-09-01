@@ -1,22 +1,26 @@
+# pylint: disable=missing-module-docstring
+
 import io
 import duckdb
 import pandas as pd
 
-con = duckdb.connect(database="data/exercices_sql_tables.duckdb",read_only=False)
+con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
 
-#-----------------------------------------------------------
-#EXERCICES LIST
-#-----------------------------------------------------------
+# -----------------------------------------------------------
+# EXERCICES LIST
+# -----------------------------------------------------------
 
-data={
-    "theme": ["cross-joins","cross-joins"],
-    "exercice_name": ["beverage_and_food","sizes_and_trademarks"],
-    "tables" : [["beverages","food_items"],["sizes","trademarks"]],
-    "last_revision": ["1980-01-01","1970-01-01"]
+data = {
+    "theme": ["cross-joins", "cross-joins"],
+    "exercice_name": ["beverage_and_food", "sizes_and_trademarks"],
+    "tables": [["beverages", "food_items"], ["sizes", "trademarks"]],
+    "last_revision": ["1980-01-01", "1970-01-01"],
 }
 
 memory_state_df = pd.DataFrame(data)
-con.execute("CREATE TABLE IF NOT EXISTS memory_state_df AS SELECT * FROM memory_state_df")
+con.execute(
+    "CREATE TABLE IF NOT EXISTS memory_state_df AS SELECT * FROM memory_state_df"
+)
 
 
 CSV2 = """
@@ -38,7 +42,7 @@ tea,3
 beverages = pd.read_csv(io.StringIO(CSV))
 con.execute("CREATE TABLE IF NOT EXISTS BEVERAGES AS SELECT * FROM beverages")
 
-sizes="""
+SIZES = """
 size,
 XS,
 M,
@@ -46,10 +50,10 @@ L,
 XL
 """
 
-sizes=pd.read_csv(io.StringIO(sizes))
+size = pd.read_csv(io.StringIO(SIZES))
 con.execute("CREATE TABLE IF NOT EXISTS sizes AS SELECT * FROM sizes")
 
-trademarks="""
+TRADEMARKS = """
 trademark,
 Nike,
 Asphalte,
@@ -57,5 +61,5 @@ Abercrombie
 Lewis
 """
 
-trademarks=pd.read_csv(io.StringIO(trademarks))
+trademarks = pd.read_csv(io.StringIO(TRADEMARKS))
 con.execute("CREATE TABLE IF NOT EXISTS trademarks AS SELECT * FROM trademarks")
