@@ -1,12 +1,8 @@
 # pylint: disable=missing-module-docstring
-import ast
-
 import duckdb
 import streamlit as st
 
-con = duckdb.connect(database="data/exercices_sql_tables.duckdb",read_only=False)
-
-
+con = duckdb.connect(database="data/exercices_sql_tables.duckdb", read_only=False)
 
 with st.sidebar:
     theme = st.selectbox(
@@ -18,7 +14,12 @@ with st.sidebar:
 
     st.write("You selected :", theme)
 
-    exercise = con.execute(f"SELECT * FROM memory_state_df WHERE theme = '{theme}'").df()
+    exercise = (
+        con.execute(f"SELECT * FROM memory_state_df WHERE theme = '{theme}'")
+        .df()
+        .sort_values("last_revision")
+        .reset_index()
+    )
     st.write(exercise)
 
     exercice_name = exercise.loc[0, "exercice_name"]
